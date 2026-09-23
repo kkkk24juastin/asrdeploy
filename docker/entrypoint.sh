@@ -13,6 +13,7 @@ HF_REPO="${HF_REPO:-ggml-org/Qwen3-ASR-1.7B-GGUF}"
 LLAMA_PORT="${LLAMA_PORT:-8081}"
 LLAMA_THREADS="${LLAMA_THREADS:-16}"
 LLAMA_CTX="${LLAMA_CTX:-16384}"
+LLAMA_EXTRA_ARGS="${LLAMA_EXTRA_ARGS:-}"
 PROXY_HOST="${PROXY_HOST:-0.0.0.0}"
 PROXY_PORT="${PROXY_PORT:-8000}"
 
@@ -39,11 +40,14 @@ download_if_missing "$MODEL_FILE"
 download_if_missing "$MMPROJ_FILE"
 
 log "启动 llama-server (threads=$LLAMA_THREADS, ctx=$LLAMA_CTX) ..."
+log "附加参数: ${LLAMA_EXTRA_ARGS:-（无）}"
+# shellcheck disable=SC2086
 /opt/llama/llama-server \
   -m "$MODEL_DIR/$MODEL_FILE" \
   --mmproj "$MODEL_DIR/$MMPROJ_FILE" \
   --host 127.0.0.1 --port "$LLAMA_PORT" \
-  -t "$LLAMA_THREADS" -c "$LLAMA_CTX" &
+  -t "$LLAMA_THREADS" -c "$LLAMA_CTX" \
+  $LLAMA_EXTRA_ARGS &
 
 LLAMA_PID=$!
 

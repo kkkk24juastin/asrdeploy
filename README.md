@@ -143,8 +143,10 @@ docker compose pull && docker compose up -d
 | `PROXY_PORT` | 8000 | 宿主机映射端口 |
 | `ASR_API_KEY` | 空 | 设置后客户端需要 `Authorization: Bearer <key>`；**对外暴露前务必设置** |
 | `HF_ENDPOINT` | `https://huggingface.co` | 模型下载源（美国/海外用官方源；国内可换 `https://hf-mirror.com`） |
+| `HF_REPO` / `MODEL_FILE` / `MMPROJ_FILE` | ggml-org Q8_0 | 模型来源与文件名，支持切换量化版本（见性能调优） |
 | `LLAMA_THREADS` | 16 | CPU 推理线程数（9950X 为 16 物理核，可实测 8/12/16） |
 | `LLAMA_CTX` | 16384 | 上下文长度，决定单文件可处理的最长音频（约 10 分钟） |
+| `LLAMA_EXTRA_ARGS` | KV 量化 + Flash Attention | llama-server 附加参数（长音频提速，留空可关闭） |
 
 ## 五、API 用法
 
@@ -171,9 +173,10 @@ with open("audio.wav", "rb") as f:
 
 ## 六、性能与调优
 
+- **KV 量化 + Flash Attention**（默认开启）：KV cache 压到 8bit、注意力分块计算，长音频解码/预处理提速 10~20%，识别质量无损（数学等价 + q8 档位）。如遇启动异常，将 `LLAMA_EXTRA_ARGS` 留空即可关闭。
 - **线程**：`LLAMA_THREADS=16` 起步，实测 8/12/16 选最优（超线程反而可能略慢）。
-- **精度档**：改 `MODEL_FILE=Qwen3-ASR-1.7B-bf16.gguf`（4.1 GB，质量最高、速度约减半）。
-- **速度档**：换社区 Q4_K_M 量化（约 1.2 GB）或 Qwen3-ASR-0.6B。
+- **精度档**：把 `MODEL_FILE` 换成 `Qwen3-ASR-1.7B-bf16.gguf`（4.1 GB，质量最高、速度约减半）。
+- **速度档**：切社区 Q4_K_M（主模型约 1.2 GB，提速 25~40%，WER 约 +0.2~0.4pp）或 Qwen3-ASR-0.6B（提速 50%+，精度明显下降）。切换量化时 **mmproj 必须保持 Q8_0**（压到 Q4 会产生空输出/重复文本）。修改 `.env` 的 `HF_REPO` / `MODEL_FILE` / `MMPROJ_FILE` 后重启，新模型自动下载；旧模型文件仍在 volume 中，可手动删除。
 - **镜像自带多指令集**：llama.cpp 官方二进制含 CPU 变体分发，9950X 会自动走 AVX-512 优化路径。
 - **长音频**：默认约支持 10 分钟内单文件；更长可加大 `LLAMA_CTX`（256 GB 内存充裕）。
 
