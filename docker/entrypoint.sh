@@ -8,7 +8,7 @@ set -euo pipefail
 MODEL_DIR="${MODEL_DIR:-/models}"
 MODEL_FILE="${MODEL_FILE:-Qwen3-ASR-1.7B-Q8_0.gguf}"
 MMPROJ_FILE="${MMPROJ_FILE:-mmproj-Qwen3-ASR-1.7B-Q8_0.gguf}"
-HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
+HF_ENDPOINT="${HF_ENDPOINT:-https://huggingface.co}"
 HF_REPO="${HF_REPO:-ggml-org/Qwen3-ASR-1.7B-GGUF}"
 LLAMA_PORT="${LLAMA_PORT:-8081}"
 LLAMA_THREADS="${LLAMA_THREADS:-16}"

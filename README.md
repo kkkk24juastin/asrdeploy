@@ -144,7 +144,7 @@ docker compose pull && docker compose up -d
 |---|---|---|
 | `PROXY_PORT` | 8000 | 宿主机映射端口 |
 | `ASR_API_KEY` | 空 | 设置后客户端需要 `Authorization: Bearer <key>`；**对外暴露前务必设置** |
-| `HF_ENDPOINT` | `https://hf-mirror.com` | 模型下载源，可换 `https://huggingface.co` |
+| `HF_ENDPOINT` | `https://huggingface.co` | 模型下载源（美国/海外用官方源；国内可换 `https://hf-mirror.com`） |
 | `LLAMA_THREADS` | 16 | CPU 推理线程数（9950X 为 16 物理核，可实测 8/12/16） |
 | `LLAMA_CTX` | 16384 | 上下文长度，决定单文件可处理的最长音频（约 10 分钟） |
 
@@ -183,7 +183,7 @@ with open("audio.wav", "rb") as f:
 
 | 现象 | 处理 |
 |---|---|
-| **服务器拉不动 ghcr.io（国内常见）** | ① 服务器本地构建：把仓库 clone 到服务器后 `docker compose up -d --build`，跳过拉镜像；② 在 GitHub Actions 里追加推送到阿里云 ACR / 腾讯云 TCR 再拉取；③ 配置 Docker 代理 |
+| **服务器拉不动 ghcr.io（仅国内服务器会遇到；美国服务器可忽略）** | ① 服务器本地构建：把仓库 clone 到服务器后 `docker compose up -d --build`，跳过拉镜像；② 在 GitHub Actions 里追加推送到阿里云 ACR / 腾讯云 TCR 再拉取；③ 配置 Docker 代理 |
 | 模型下载卡住 | `.env` 中 `HF_ENDPOINT` 更换下载源；重试会断点续传 |
 | 首次启动 "卡住" | 正常：正在下载 2.6 GB 模型，看 `docker compose logs -f` |
 | 端口冲突 | 修改 `.env` 的 `PROXY_PORT` |

@@ -68,7 +68,7 @@ VOLUME ["/models"]
 ENV MODEL_DIR=/models \
     MODEL_FILE=Qwen3-ASR-1.7B-Q8_0.gguf \
     MMPROJ_FILE=mmproj-Qwen3-ASR-1.7B-Q8_0.gguf \
-    HF_ENDPOINT=https://hf-mirror.com \
+    HF_ENDPOINT=https://huggingface.co \
     HF_REPO=ggml-org/Qwen3-ASR-1.7B-GGUF \
     LLAMA_PORT=8081 \
     LLAMA_THREADS=16 \
