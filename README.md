@@ -32,8 +32,6 @@ asrdeploy/
 │   └── requirements.txt
 ├── .github/workflows/docker.yml  # CI：构建并推送 GHCR
 ├── .env.example                  # 配置模板
-├── scripts/                      # 裸机（非 Docker）部署脚本，见文末
-├── systemd/                      # 裸机 systemd 服务单元
 └── tests/                        # 接口测试（smoke.sh / OpenAI SDK 示例）
 ```
 
@@ -198,18 +196,6 @@ CI 会在 GitHub 上完成构建；如需本地验证：
 docker build -t qwen3-asr:local .
 docker run --rm -p 8000:8000 -v asr-models:/models qwen3-asr:local
 ```
-
-## 九、裸机（非 Docker）备选方案
-
-同一仓库保留了不经 Docker 的部署方式，适合不能用容器的环境：
-
-```bash
-./scripts/01-install.sh        # 装依赖 + llama.cpp 预编译包 + venv
-./scripts/02-download-models.sh
-./scripts/service.sh start     # 或安装 systemd/ 下的服务单元
-```
-
-细节见 `scripts/`、`systemd/` 内注释。
 
 ## 许可
 

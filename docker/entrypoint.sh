@@ -16,6 +16,9 @@ LLAMA_CTX="${LLAMA_CTX:-16384}"
 PROXY_HOST="${PROXY_HOST:-0.0.0.0}"
 PROXY_PORT="${PROXY_PORT:-8000}"
 
+# 代理到 llama-server 的上游地址（随 LLAMA_PORT 自动匹配）
+export UPSTREAM_URL="${UPSTREAM_URL:-http://127.0.0.1:$LLAMA_PORT}"
+
 log() { echo "[entrypoint] $*"; }
 
 mkdir -p "$MODEL_DIR"
