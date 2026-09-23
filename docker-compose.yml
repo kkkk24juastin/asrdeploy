@@ -10,7 +10,7 @@
 
 services:
   asr:
-    image: ghcr.io/kkkk24juastin/asrdeploy:sha-dd58a2e
+    image: ghcr.io/kkkk24juastin/asrdeploy:latest
     build: .
     container_name: qwen3-asr
     init: true
