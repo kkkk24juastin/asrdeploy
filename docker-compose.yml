@@ -10,7 +10,7 @@
 
 services:
   asr:
-    image: ghcr.io/YOUR_GITHUB_USERNAME/asrdeploy:latest
+    image: ghcr.io/kkkk24juastin/asrdeploy:sha-dd58a2e
     build: .
     container_name: qwen3-asr
     init: true
