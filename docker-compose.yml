@@ -1,0 +1,29 @@
+# 用法（服务器上）：
+#   1. 把下面的 image 改成你的实际仓库地址（CI 构建后输出）：
+#        ghcr.io/<你的GitHub用户名>/<仓库名>:latest
+#   2. docker compose pull
+#      docker compose up -d
+#   3. 首次启动会自动下载模型（约 2.6 GB），跟踪日志：
+#        docker compose logs -f
+#
+# 本地不使用 CI 镜像时：docker compose up -d --build
+
+services:
+  asr:
+    image: ghcr.io/YOUR_GITHUB_USERNAME/asrdeploy:latest
+    build: .
+    container_name: qwen3-asr
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${PROXY_PORT:-8000}:8000"
+    volumes:
+      - asr-models:/models
+    environment:
+      ASR_API_KEY: "${ASR_API_KEY:-}"
+      HF_ENDPOINT: "${HF_ENDPOINT:-https://hf-mirror.com}"
+      LLAMA_THREADS: "${LLAMA_THREADS:-16}"
+      LLAMA_CTX: "${LLAMA_CTX:-16384}"
+
+volumes:
+  asr-models:
